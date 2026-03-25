@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urban Bites</title>
+    <meta
+      name="description"
+      content="Urban Bites is a cinematic city restaurant experience with immersive dining and WhatsApp ordering."
+    />
+    <style>
+      :root {
+        --bg: #0d0b0a;
+        --bg-soft: #171310;
+        --paper: #efe3d1;
+        --sand: #cbb79c;
+        --text: #f7f2ea;
+        --muted: rgba(247, 242, 234, 0.72);
+        --line: rgba(247, 242, 234, 0.14);
+        --accent: #c96b3b;
+        --green: #1a5c45;
+        --shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+        --container: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .sans {
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      .site-shell {
+        overflow: clip;
+      }
+
+      .container {
+        width: min(calc(100% - 2rem), var(--container));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 20;
+        padding: 1rem 0;
+        background: linear-gradient(180deg, rgba(13, 11, 10, 0.78), rgba(13, 11, 10, 0));
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .brand {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+
+      .brand strong {
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+
+      .brand span,
+      .nav-links,
+      .scene-lead,
+      .scene-copy,
+      .quote,
+      .meta,
+      .kicker,
+      .footer {
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      .brand span,
+      .nav-links,
+      .meta {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.95rem 1.4rem;
+        border-radius: 999px;
+        transition: transform 160ms ease, background 160ms ease;
+        font: 700 0.9rem/1 "Segoe UI", Arial, sans-serif;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .btn-secondary {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .scene {
+        position: relative;
+      }
+
+      .scene-panel {
+        min-height: 100vh;
+        display: grid;
+        align-items: end;
+        padding: 7rem 0 3rem;
+      }
+
+      .scene-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(8, 7, 6, 0.28), rgba(8, 7, 6, 0.82));
+      }
+
+      .scene-panel > .container {
+        position: relative;
+        z-index: 1;
+      }
+
+      .scene-hero {
+        background:
+          linear-gradient(180deg, rgba(13, 11, 10, 0.18), rgba(13, 11, 10, 0.18)),
+          url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .scene-kitchen {
+        background:
+          linear-gradient(180deg, rgba(13, 11, 10, 0.2), rgba(13, 11, 10, 0.2)),
+          url("https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .scene-plates {
+        background:
+          linear-gradient(180deg, rgba(13, 11, 10, 0.2), rgba(13, 11, 10, 0.3)),
+          url("https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .scene-room {
+        background:
+          linear-gradient(180deg, rgba(13, 11, 10, 0.18), rgba(13, 11, 10, 0.24)),
+          url("https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .story-block {
+        max-width: 44rem;
+      }
+
+      .kicker {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: var(--sand);
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 9ch;
+        font-size: clamp(4rem, 9vw, 8.4rem);
+        line-height: 0.88;
+        letter-spacing: -0.07em;
+        font-weight: 500;
+      }
+
+      .scene-lead {
+        max-width: 34rem;
+        margin-top: 1.4rem;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.9;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 2rem;
+      }
+
+      .scene-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+        padding: 8rem 0;
+      }
+
+      .scene-copy h2 {
+        font-size: clamp(2.8rem, 5vw, 5.4rem);
+        line-height: 0.92;
+        letter-spacing: -0.05em;
+        font-weight: 500;
+        max-width: 8ch;
+      }
+
+      .scene-copy p {
+        margin-top: 1.2rem;
+        max-width: 31rem;
+        color: var(--muted);
+        line-height: 1.85;
+        font-size: 1rem;
+      }
+
+      .sticky-frame {
+        position: sticky;
+        top: 5.5rem;
+        min-height: calc(100vh - 7rem);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: flex;
+        align-items: end;
+      }
+
+      .sticky-frame::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(7, 6, 5, 0.05), rgba(7, 6, 5, 0.64));
+      }
+
+      .frame-kitchen {
+        background:
+          url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .frame-plates {
+        background:
+          url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .frame-room {
+        background:
+          url("https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .frame-copy {
+        position: relative;
+        z-index: 1;
+        padding: 1.5rem;
+        max-width: 22rem;
+      }
+
+      .frame-copy h3 {
+        font-size: 1.6rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .frame-copy p {
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .menu-list {
+        display: grid;
+        gap: 1.8rem;
+        margin-top: 2rem;
+      }
+
+      .menu-item {
+        padding-top: 1.3rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .menu-item-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: baseline;
+      }
+
+      .menu-item h3 {
+        font-size: 1.85rem;
+        font-weight: 500;
+      }
+
+      .price {
+        color: var(--sand);
+        font: 700 0.92rem/1 "Segoe UI", Arial, sans-serif;
+        letter-spacing: 0.14em;
+      }
+
+      .quote-column {
+        display: grid;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .quote {
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+        max-width: 30rem;
+      }
+
+      .quote p {
+        color: var(--text);
+        font-size: 1.1rem;
+        line-height: 1.95;
+      }
+
+      .quote strong {
+        display: block;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+
+      .quote span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .location-block {
+        display: grid;
+        gap: 1.6rem;
+        margin-top: 2rem;
+      }
+
+      .location-line {
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .location-line strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        font-size: 0.96rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      .location-line p {
+        color: var(--muted);
+        line-height: 1.85;
+      }
+
+      .final-scene {
+        min-height: 100vh;
+        display: grid;
+        align-items: end;
+        padding: 7rem 0 3rem;
+        background:
+          linear-gradient(180deg, rgba(13, 11, 10, 0.26), rgba(13, 11, 10, 0.9)),
+          url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80")
+            center/cover;
+      }
+
+      .final-panel {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 2rem;
+        align-items: end;
+      }
+
+      .final-panel h2 {
+        max-width: 8ch;
+        font-size: clamp(3rem, 6vw, 6rem);
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+        font-weight: 500;
+      }
+
+      .final-panel p {
+        margin-top: 1rem;
+        max-width: 31rem;
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .final-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        justify-content: flex-end;
+      }
+
+      .footer {
+        padding: 1.5rem 0 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      @media (max-width: 980px) {
+        .scene-grid,
+        .final-panel {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .sticky-frame {
+          position: relative;
+          top: auto;
+          min-height: 60vh;
+        }
+
+        .final-actions {
+          justify-content: start;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .container {
+          width: min(calc(100% - 1.2rem), var(--container));
+        }
+
+        .nav {
+          flex-direction: column;
+          align-items: start;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          gap: 0.85rem;
+        }
+
+        h1,
+        .final-panel h2 {
+          max-width: none;
+        }
+
+        .scene-copy h2 {
+          max-width: none;
+        }
+
+        .scene-panel,
+        .final-scene {
+          padding-top: 8rem;
+        }
+
+        .sticky-frame {
+          min-height: 42vh;
+          border-radius: 22px;
+        }
+
+        .hero-actions,
+        .final-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container nav">
+          <a class="brand" href="#top">
+            <strong>Urban Bites</strong>
+            <span class="sans">Downtown London</span>
+          </a>
+          <nav class="nav-links sans">
+            <a href="#story-menu">Menu</a>
+            <a href="#story-voices">Voices</a>
+            <a href="#story-location">Location</a>
+            <a
+              class="btn btn-primary"
+              href="https://wa.me/15551234567?text=Hi%20Urban%20Bites%2C%20I%27d%20like%20to%20place%20an%20order."
+              target="_blank"
+              rel="noreferrer"
+              >Order on WhatsApp</a
+            >
+          </nav>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="scene scene-panel scene-hero">
+          <div class="container">
+            <div class="story-block">
+              <span class="kicker">Urban Bites</span>
+              <h1>After dark, the city eats differently.</h1>
+              <p class="scene-lead">
+                Urban Bites is built like a night in motion: warm light, low
+                noise, a kitchen moving fast, and plates that land with real
+                presence. Scroll through the room, the food, and the people who
+                keep coming back.
+              </p>
+              <div class="hero-actions">
+                <a
+                  class="btn btn-primary"
+                  href="https://wa.me/15551234567?text=Hi%20Urban%20Bites%2C%20I%27d%20like%20to%20place%20an%20order."
+                  target="_blank"
+                  rel="noreferrer"
+                  >Order via WhatsApp</a
+                >
+                <a class="btn btn-secondary" href="#story-menu">Enter the story</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene" id="story-menu">
+          <div class="container scene-grid">
+            <div class="sticky-frame frame-kitchen">
+              <div class="frame-copy">
+                <h3>The first order</h3>
+                <p class="meta sans">
+                  Street Fire Burger, truffle fries, citrus house soda.
+                </p>
+              </div>
+            </div>
+
+            <div class="scene-copy">
+              <span class="kicker">Featured menu</span>
+              <h2>The meal starts with heat, salt, and contrast.</h2>
+              <p class="scene-copy sans">
+                The menu is deliberately tight. Burgers that arrive rich and
+                sharp, bowls that feel clean without losing flavor, sides that
+                do more than fill space. Everything is meant to read like a
+                sequence, not a list.
+              </p>
+
+              <div class="menu-list">
+                <article class="menu-item">
+                  <div class="menu-item-header">
+                    <h3>Street Fire Burger</h3>
+                    <span class="price">$14</span>
+                  </div>
+                  <p class="scene-copy sans">
+                    Double smashed beef, cheddar, pickles, crisp onions, and a
+                    pepper sauce with a slow finish.
+                  </p>
+                </article>
+
+                <article class="menu-item">
+                  <div class="menu-item-header">
+                    <h3>Metro Grain Bowl</h3>
+                    <span class="price">$13</span>
+                  </div>
+                  <p class="scene-copy sans">
+                    Charred chicken, herbed rice, avocado, greens, roasted corn,
+                    and lime crema. A cooler note between richer plates.
+                  </p>
+                </article>
+
+                <article class="menu-item">
+                  <div class="menu-item-header">
+                    <h3>Truffle Fries</h3>
+                    <span class="price">$9</span>
+                  </div>
+                  <p class="scene-copy sans">
+                    Crisp fries finished with parmesan, herbs, and smoky garlic
+                    dip. The table orders them once and then every time after.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene scene-panel scene-kitchen">
+          <div class="container">
+            <div class="story-block">
+              <span class="kicker">Between courses</span>
+              <h2 style="font-size: clamp(3rem, 6vw, 6.2rem); line-height: 0.9; letter-spacing: -0.06em; font-weight: 500; max-width: 9ch;">
+                Fast hands. Quiet room. No wasted motion.
+              </h2>
+              <p class="scene-lead">
+                Urban Bites works best when it feels effortless. Pickup stays
+                quick, the room stays calm, and the food leaves the pass exactly
+                when it should.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene" id="story-voices">
+          <div class="container scene-grid">
+            <div class="sticky-frame frame-plates">
+              <div class="frame-copy">
+                <h3>What people remember</h3>
+                <p class="meta sans">
+                  Flavor first. Then the ease of the whole thing.
+                </p>
+              </div>
+            </div>
+
+            <div class="scene-copy">
+              <span class="kicker">Testimonials</span>
+              <h2>The room leaves an impression. So does the food.</h2>
+              <p class="scene-copy sans">
+                People talk about the burger, the fries, the pace, the way
+                ordering on WhatsApp removes the usual friction. The comments
+                tend to sound less like reviews and more like memory.
+              </p>
+
+              <div class="quote-column">
+                <blockquote class="quote">
+                  <p>
+                    “It feels cinematic without being precious. The burger is
+                    genuinely good and the ordering flow is the easiest part of the night.”
+                  </p>
+                  <strong class="sans">AMARA J.</strong>
+                  <span>Frequent lunch guest</span>
+                </blockquote>
+
+                <blockquote class="quote">
+                  <p>
+                    “We ordered for the office and everything arrived hot,
+                    labelled, and on time. It felt considered from start to finish.”
+                  </p>
+                  <strong class="sans">DANIEL R.</strong>
+                  <span>Founder, nearby studio</span>
+                </blockquote>
+
+                <blockquote class="quote">
+                  <p>
+                    “Urban Bites has a mood of its own. It does not feel like a
+                    generic restaurant concept, and that matters.”
+                  </p>
+                  <strong class="sans">SOPHIA K.</strong>
+                  <span>Regular customer</span>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene scene-panel scene-room">
+          <div class="container">
+            <div class="story-block">
+              <span class="kicker">The room</span>
+              <h2 style="font-size: clamp(3rem, 6vw, 6rem); line-height: 0.9; letter-spacing: -0.06em; font-weight: 500; max-width: 8ch;">
+                Stay for dinner. Leave later than planned.
+              </h2>
+              <p class="scene-lead">
+                A restaurant should change the pace around you. Urban Bites is
+                built for that moment when the city softens and dinner becomes
+                the reason to stay out.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene" id="story-location">
+          <div class="container scene-grid">
+            <div class="sticky-frame frame-room">
+              <div class="frame-copy">
+                <h3>Downtown London</h3>
+                <p class="meta sans">
+                  Five minutes from Central Station.
+                </p>
+              </div>
+            </div>
+
+            <div class="scene-copy">
+              <span class="kicker">Location</span>
+              <h2>Easy to reach. Hard to forget.</h2>
+              <p class="scene-copy sans">
+                Right in the center of town, close to offices, galleries, and
+                late foot traffic. Walk in for dinner, collect on the way home,
+                or message ahead and let the kitchen start before you arrive.
+              </p>
+
+              <div class="location-block">
+                <div class="location-line">
+                  <strong>Address</strong>
+                  <p class="scene-copy sans">128 Market Street, Downtown District, London</p>
+                </div>
+
+                <div class="location-line">
+                  <strong>Opening hours</strong>
+                  <p class="scene-copy sans">
+                    Mon - Thu: 11:00 AM - 10:00 PM<br />
+                    Fri - Sun: 11:00 AM - 11:30 PM
+                  </p>
+                </div>
+
+                <div class="location-line">
+                  <strong>Phone & WhatsApp</strong>
+                  <p class="scene-copy sans">+1 (555) 123-4567</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="final-scene">
+          <div class="container">
+            <div class="final-panel">
+              <div>
+                <span class="kicker">Final call</span>
+                <h2>Tonight is one message away.</h2>
+                <p class="scene-copy sans">
+                  Order on WhatsApp, confirm pickup or delivery, and step
+                  straight into the evening without a long checkout or a noisy app.
+                </p>
+              </div>
+              <div class="final-actions">
+                <a
+                  class="btn btn-primary"
+                  href="https://wa.me/15551234567?text=Hi%20Urban%20Bites%2C%20I%27d%20like%20to%20place%20an%20order."
+                  target="_blank"
+                  rel="noreferrer"
+                  >Start WhatsApp order</a
+                >
+                <a class="btn btn-secondary" href="#top">Back to top</a>
+              </div>
+            </div>
+            <div class="footer sans">
+              &copy; <span id="copyright-year"></span> Urban Bites, CKH Intelligence. All Rights Reserved.
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      document.getElementById("copyright-year").textContent =
+        new Date().getFullYear();
+    </script>
+  </body>
+</html>
